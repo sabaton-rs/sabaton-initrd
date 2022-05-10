@@ -44,7 +44,7 @@ fn main() {
     }
 
     // Enable proper logging
-    simple_logger::SimpleLogger::new().with_utc_timestamps().with_level(log::LevelFilter::Info).init().unwrap();
+    simple_logger::SimpleLogger::new().with_utc_timestamps().with_level(log::LevelFilter::Debug).init().unwrap();
 
     // Use the default implementation of the boothal
     let mut boot_hal = sabaton_hal::bootloader::mock::DefaultImpl;
