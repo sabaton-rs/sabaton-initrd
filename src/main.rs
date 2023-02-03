@@ -64,19 +64,6 @@ fn main() {
 
     let new_root_metadata = std::fs::metadata("/").expect("Cannot get metadata of new root");
 
-    let device_unique_id = get_device_unique_id().unwrap();
-    let mut file = OpenOptions::new()
-        .read(true)
-        .write(true)
-        .create(true)
-        .open("/tmp/device_unique_id")
-        .expect("Unable to open a writable file");
-    file.write(device_unique_id.as_bytes())
-        .expect("Unable to write device id to file");
-    println!("device_unique_id:{}", device_unique_id);
-    let res = libmount::BindMount::new("/tmp/device_unique_id", "/etc/machine-id");
-    println!("RES={}", res);
-    res.bare_mount().expect("Mount not sucessful!");
     if std::os::linux::fs::MetadataExt::st_dev(&new_root_metadata)
         != std::os::linux::fs::MetadataExt::st_dev(&orig_root_metadata)
     {
@@ -92,7 +79,19 @@ fn main() {
         pre_mount_time - start_time,
         mount_time - start_time
     );
-
+    let device_unique_id = get_device_unique_id().unwrap();
+    let mut file = OpenOptions::new()
+        .read(true)
+        .write(true)
+        .create(true)
+        .open("/tmp/device_unique_id")
+        .expect("Unable to open a writable file");
+    file.write(device_unique_id.as_bytes())
+        .expect("Unable to write device id to file");
+    println!("device_unique_id:{}", device_unique_id);
+    let res = libmount::BindMount::new("/tmp/device_unique_id", "/etc/machine-id");
+    println!("RES={}", res);
+    res.bare_mount().expect("Mount not sucessful!");
     // Now we're ready to exec into the second stage init inside the root
     // partition. We expect the init to be in /sbin/init
     // initception does not attempt to mount the early devices when the -n parameter
