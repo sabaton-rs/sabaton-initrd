@@ -14,7 +14,7 @@ walkdir = "2.3.2"
 sabaton-hal = { git = "https://github.com/sabaton-rs/sabaton-hal.git"}
 log = "0.4.14"
 simple_logger = "1.13.0"
-
+libmount = "0.1.15"
 [profile.release]
 opt-level = 'z' # turn on maximum optimizations.
 lto = true      # Link-time-optimizations for further size reduction
