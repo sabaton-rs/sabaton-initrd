@@ -15,7 +15,7 @@ use std::{alloc::System, ffi::CString, path::Path};
 static GLOBAL: System = System;
 
 const SYSTEM_INIT_PATH: *const std::os::raw::c_char = c_str!("/sbin/init");
-
+xxx
 use std::os::unix::fs::PermissionsExt;
 fn main() {
     let start_time = std::time::Instant::now();
