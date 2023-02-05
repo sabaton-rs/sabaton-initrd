@@ -86,12 +86,19 @@ fn main() {
         .create(true)
         .open("/tmp/device_unique_id")
         .expect("Unable to open a writable file");
-    file.write(device_unique_id.as_bytes())
-        .expect("Unable to write device id to file");
-    println!("device_unique_id:{}", device_unique_id);
+    let file_write_status = file.write(device_unique_id.as_bytes());
+    match file_write_status {
+        Ok(_) => log::info!("Device unique id written sucessfully"),
+        Err(e) => log::info!("Device unique id Failure:{}", e),
+    }
+    log::info!("device_unique_id:{}", device_unique_id);
     let res = libmount::BindMount::new("/tmp/device_unique_id", "/etc/machine-id");
-    println!("RES={}", res);
-    res.bare_mount().expect("Mount not sucessful!");
+    log::info!("RES={}", res);
+    let mount_status = res.bare_mount();
+    match mount_status {
+        Ok(_) => log::info!("MOUNT sucessfull"),
+        Err(e) => log::info!("MOUNT failure:{}", e),
+    }
     // Now we're ready to exec into the second stage init inside the root
     // partition. We expect the init to be in /sbin/init
     // initception does not attempt to mount the early devices when the -n parameter
